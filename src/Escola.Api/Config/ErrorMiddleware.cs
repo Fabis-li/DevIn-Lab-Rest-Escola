@@ -50,7 +50,7 @@ public class ErrorMiddleware
         }
 
         var response = new ErrorDTO(message);
-
+        
         context.Response.StatusCode = (int) status;
         return context.Response.WriteAsJsonAsync(response);
         
