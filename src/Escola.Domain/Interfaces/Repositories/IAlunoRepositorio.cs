@@ -11,7 +11,7 @@ namespace Escola.Domain.Interfaces.Repositories
         IList<Aluno> ObterTodos();
         Aluno ObterPorId(Guid id);
         void Inserir(Aluno aluno);
-        void Excluir (Guid id);
+        void Excluir (Aluno aluno);
         void Atualizar(Aluno aluno);
         bool ExisteMatricula(int matricula);
 

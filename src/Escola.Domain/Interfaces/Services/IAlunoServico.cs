@@ -12,6 +12,6 @@ namespace Escola.Domain.Interfaces.Services
         AlunoDTO ObterPorId(Guid id);
         void Inserir(AlunoDTO aluno);
         void Excluir (Guid id);
-        void Atualizar(Guid id);
+        void Atualizar(AlunoDTO aluno);
     }
 }

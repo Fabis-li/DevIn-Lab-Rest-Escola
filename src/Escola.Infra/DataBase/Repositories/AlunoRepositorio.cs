@@ -27,11 +27,6 @@ namespace Escola.Infra.DataBase.Repositories
             _contexto.SaveChanges();
         }
 
-        public void Excluir(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
         public bool ExisteMatricula(int matricula)
         {
             return _contexto.Alunos.Any(x => x.Matricula == matricula);

@@ -63,7 +63,7 @@ namespace Escola.Api.Controllers
         public IActionResult Atualizar(Guid id, [FromBody] AlunoDTO aluno){
             try{
                 aluno.Id = id;
-                _alunoServico.Atualizar(id);
+                _alunoServico.Atualizar(aluno);
                 return Ok();
             }
             catch{

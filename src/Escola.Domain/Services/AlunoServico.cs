@@ -24,17 +24,11 @@ namespace Escola.Domain.Services
             alunoDb.Update(aluno);
             //alunoDb.Update(new Aluno(aluno));
             _alunoRepositorio.Atualizar(alunoDb);
-        }
-
-        public void Atualizar(Guid id)
-        {
-            throw new NotImplementedException();
-        }
+        }      
 
         public void Excluir(Guid id)
         {
             var aluno = _alunoRepositorio.ObterPorId(id);
-
             _alunoRepositorio.Excluir(aluno);
         }
 
