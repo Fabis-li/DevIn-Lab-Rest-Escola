@@ -58,10 +58,15 @@ namespace Escola.Domain.Services
                                         .Select(x => new MateriaDTO(x)).ToList();
         }
 
-        public IList<MateriaDTO> ObterTodos()
+        public IList<MateriaDTO> ObterTodos(Paginacao paginacao)
         {
-            return _materiaRepositorio.ObterTodos()
+            return _materiaRepositorio.ObterTodos(paginacao)
                                         .Select(x => new MateriaDTO(x)).ToList();
+        }
+
+        public int ObterTotal()
+        {
+           return _materiaRepositorio.ObterTotal();
         }
     }
 }
