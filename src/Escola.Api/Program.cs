@@ -11,10 +11,16 @@ builder.Services.AddDbContext<EscolaDBContexto>();
 
 builder.Services.AddScoped<IAlunoRepositorio,AlunoRepositorio>();
 builder.Services.AddScoped<IAlunoServico,AlunoServico>();
+builder.Services.AddScoped<IMateriaRespositorio,MateriaRepositorio>();
+builder.Services.AddScoped<IMateriaServico, MateriaServico>();
+builder.Services.AddScoped<INotasMateriaRepositorio, NotasMateriaRepositorio>();
+builder.Services.AddScoped<INotasMateriaServico, NotasMateriaServico>();
 
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
+
+
 
 var app = builder.Build();
 app.MapControllers();

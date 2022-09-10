@@ -13,6 +13,10 @@ namespace Escola.Infra.DataBase
     {
         
         public DbSet<Aluno> Alunos {get; set;}
+        public DbSet<Materia> Materias{get; set;}
+        public DbSet<Boletim> Boletins {get; set;}
+        public DbSet<NotasMateria> NotasMaterias {get; set;}
+        
         
         private readonly IConfiguration _configuration;
         public EscolaDBContexto(IConfiguration configuration)
@@ -26,6 +30,11 @@ namespace Escola.Infra.DataBase
 
         protected override void OnModelCreating(ModelBuilder modelBuilder){
             modelBuilder.ApplyConfiguration(new AlunoMap());
+            modelBuilder.ApplyConfiguration(new BolteimMap());
+            modelBuilder.ApplyConfiguration(new MateriaMap());
+            modelBuilder.ApplyConfiguration(new NotasMateriaMap());
         }
+
+              
     }
 }

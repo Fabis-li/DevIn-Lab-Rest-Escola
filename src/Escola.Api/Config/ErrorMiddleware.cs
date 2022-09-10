@@ -1,6 +1,7 @@
 using System.Net;
 using Escola.Domain.DTO;
 using Escola.Domain.Exceptions;
+using Newtonsoft.Json;
 
 namespace Escola.Api.Config;
 
@@ -43,7 +44,16 @@ public class ErrorMiddleware
         if(ex is DuplicadoException){
             status = HttpStatusCode.NotAcceptable;
             message = ex.Message;
-        }        
+        } 
+        else if(ex is EhMenorIdadeException){
+            status = HttpStatusCode.NotAcceptable;
+            message = ex.Message;
+        }
+        else if(ex is RegistroExistenteException){
+            status = HttpStatusCode.NotFound;
+            message = ex.Message;
+
+        }               
         else{
             status = HttpStatusCode.InternalServerError;
             message = "Ocorreu um erro favor contactar a TI";
@@ -52,8 +62,7 @@ public class ErrorMiddleware
         var response = new ErrorDTO(message);
         
         context.Response.StatusCode = (int) status;
-        return context.Response.WriteAsJsonAsync(response);
-        
-
+        return context.Response.WriteAsJsonAsync(response);   
+ 
     }
 }
