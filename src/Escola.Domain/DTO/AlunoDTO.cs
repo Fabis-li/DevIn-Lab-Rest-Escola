@@ -19,12 +19,25 @@ namespace Escola.Domain.DTO
             DataNascimento = aluno.DataNascimento;
         }
 
+         public AlunoDTO(AlunoV2DTO aluno)
+        {
+            Id = aluno.Id;
+            Nome = aluno.Nome;
+            Email = aluno.Email;
+            Matricula = aluno.RA;
+            Sobrenome = aluno.Sobrenome;
+            DataNascimento = aluno.DataNascimento;
+        }
+
+
         public Guid Id { get; set; } = Guid.NewGuid();
         public int Matricula { get; set; }
         public string Nome { get; set; }
         public string Sobrenome { get; set; }
         public string Email { get; set; }
         public DateTime DataNascimento { get; set; }
+
+        public string Boletim { get {return $"http://localhost:5216/api/alunos/{id}/Boletims" ; } private set {} }
         
-    }
+    } 
 }

@@ -13,7 +13,7 @@ using Escola.Domain.Models;
 namespace Escola.Api.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v2/alunos")]
     public class AlunosV2Controller : ControllerBase
     {
 
@@ -39,7 +39,7 @@ namespace Escola.Api.Controllers
                         TotalRegistros = totalRegistros
                     };
 
-                return Ok(resultado);
+                return Ok(_alunoServico.ObterTodos(paginacao).Select(x => new AlunoV2DTO(x)));
             }
             catch{
                 return StatusCode(StatusCodes.Status500InternalServerError);
@@ -50,7 +50,7 @@ namespace Escola.Api.Controllers
         public IActionResult ObterPorId (Guid id)
         {
            try{
-            return Ok(_alunoServico.ObterPorId(id));
+            return Ok(new AlunoV2DTO(_alunoServico.ObterPorId(id)));
            }
            catch{
             return StatusCode(StatusCodes.Status500InternalServerError);
@@ -59,18 +59,18 @@ namespace Escola.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Inserir (AlunoDTO aluno){
+        public IActionResult Inserir (AlunoV2DTO aluno){
            
-            _alunoServico.Inserir(aluno);
+            _alunoServico.Inserir(new AlunoDTO(aluno));
                         
             return StatusCode(StatusCodes.Status201Created);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Atualizar(Guid id, [FromBody] AlunoDTO aluno){
+        public IActionResult Atualizar(Guid id, [FromBody] AlunoV2DTO aluno){
             try{
                 aluno.Id = id;
-                _alunoServico.Atualizar(aluno);
+                _alunoServico.Atualizar(new AlunoDTO(aluno));
                 return Ok();
             }
             catch{

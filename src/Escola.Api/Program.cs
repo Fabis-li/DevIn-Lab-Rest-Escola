@@ -16,6 +16,9 @@ builder.Services.AddScoped<IMateriaServico, MateriaServico>();
 builder.Services.AddScoped<INotasMateriaRepositorio, NotasMateriaRepositorio>();
 builder.Services.AddScoped<INotasMateriaServico, NotasMateriaServico>();
 
+builder.Services.AddMemoryCache();
+builder.Services.AddScoped(typeof(CacheService<>));
+
 
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();

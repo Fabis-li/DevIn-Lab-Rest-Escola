@@ -8,7 +8,8 @@ using Escola.Domain.DTO;
 using Escola.Domain.Interfaces.Services;
 using Escola.Domain.Exceptions;
 using Escola.Domain.Models;
-
+using Microsoft.Extensions.Caching.Memory;
+using Escola.Api.Config;
 
 namespace Escola.Api.Controllers
 {
@@ -19,9 +20,14 @@ namespace Escola.Api.Controllers
 
         private readonly IAlunoServico _alunoServico;
         
-        public AlunosController(IAlunoServico alunoServico)
+        private readonly CacheService<AlunoDTO> _alunoCache;
+        
+        public AlunosController(IAlunoServico alunoServico, CacheService<AlunoDTO> alunoCache)
         {
+            alunoCache.Config("aluno", new TimeSpan(0,2,0));
+            _alunoCache = alunoCache;
             _alunoServico = alunoServico;
+            
         }
 
         [HttpGet]
@@ -33,13 +39,20 @@ namespace Escola.Api.Controllers
 
                 Response.Headers.Add("x-paginacao-TotalRegistros", totalRegistros.ToString());
 
-                var resultado = new BaseDTO();
-                    resultado.Data = _alunoServico.ObterTodos(paginacao);
-                    resultado.pagiancao = new PaginacaoDTO(){
-                        TotalRegistros = totalRegistros
-                    };
+                Response.Cookies.Append("TesteCookie", 
+                                    Newtonsoft.Json.JsonConvert.SerializeObject(paginacao),
+                                    new CookieOptions(){
+                                        Expires = DateTimeOffset.Now.AddDays(5),
+                                        //MaxAge = new TimeSpan(5,0,0,0)
+                                    });
 
-                return Ok(resultado);
+                // var resultado = new BaseDTO();
+                //     resultado.Data = _alunoServico.ObterTodos(paginacao);
+                //     resultado.pagiancao = new PaginacaoDTO(){
+                //         TotalRegistros = totalRegistros
+                //     };
+
+                return Ok(_alunoServico.ObterTodos(paginacao));
             }
             catch{
                 return StatusCode(StatusCodes.Status500InternalServerError);
@@ -49,13 +62,16 @@ namespace Escola.Api.Controllers
         [HttpGet("{id}")]
         public IActionResult ObterPorId (Guid id)
         {
-           try{
-            return Ok(_alunoServico.ObterPorId(id));
-           }
-           catch{
-            return StatusCode(StatusCodes.Status500InternalServerError);
-           }
+            var cookie = Request.Cookies["TesteCookie"];
+            AlunoDTO aluno;
+            //var aluno = _cache.Get<AlunoDTO>($"aluno:{id}");
 
+            if(!_alunoCache.TryGetValue($"aluno:{id}", out aluno)){
+                 aluno = _alunoServico.ObterPorId(id);
+                _alunoCache.Set(id.ToString(), aluno);                
+            }
+           
+            return Ok(aluno);
         }
 
         [HttpPost]
@@ -68,25 +84,20 @@ namespace Escola.Api.Controllers
 
         [HttpPut("{id}")]
         public IActionResult Atualizar(Guid id, [FromBody] AlunoDTO aluno){
-            try{
-                aluno.Id = id;
-                _alunoServico.Atualizar(aluno);
-                return Ok();
-            }
-            catch{
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            aluno.Id = id;
+            _alunoServico.Atualizar(aluno);
+            _alunoCache.Set(id.ToString(), aluno);
+            //_cache.Remove($"aluno{id}");
+            return Ok();          
+           
         }
 
         [HttpDelete("{id}")]
         public IActionResult Deletar(Guid id){
-            try{
-                _alunoServico.Excluir(id);
-                return StatusCode(StatusCodes.Status204NoContent);
-            }
-            catch{
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            _alunoServico.Excluir(id);
+            _alunoCache.Remove($"{id}");
+            return StatusCode(StatusCodes.Status204NoContent);
+            
         }
 
         
