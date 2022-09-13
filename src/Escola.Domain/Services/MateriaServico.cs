@@ -63,6 +63,7 @@ namespace Escola.Domain.Services
             return _materiaRepositorio.ObterTodos(paginacao)
                                         .Select(x => new MateriaDTO(x)).ToList();
         }
+        
 
         public int ObterTotal()
         {

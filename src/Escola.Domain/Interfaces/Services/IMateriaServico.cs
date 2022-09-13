@@ -12,6 +12,8 @@ namespace Escola.Domain.Interfaces.Services
         void Excluir (int id);
         void Atualizar(MateriaDTO materia);
         public int ObterTotal();
+
+        
         
     }
 }

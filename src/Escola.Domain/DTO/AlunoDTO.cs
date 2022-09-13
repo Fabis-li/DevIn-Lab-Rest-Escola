@@ -3,7 +3,7 @@ using Escola.Domain.Models;
 
 namespace Escola.Domain.DTO
 {
-    public class AlunoDTO
+    public class AlunoDTO : BaseHateoasDTO
     {
         public AlunoDTO()
         {
@@ -36,8 +36,9 @@ namespace Escola.Domain.DTO
         public string Sobrenome { get; set; }
         public string Email { get; set; }
         public DateTime DataNascimento { get; set; }
+       
 
-        public string Boletim { get {return $"http://localhost:5216/api/alunos/{id}/Boletims" ; } private set {} }
+        public string Boletim { get {return $"http://localhost:5216/api/alunos/{Id}/Boletims"; } private set {} }
         
     } 
 }
