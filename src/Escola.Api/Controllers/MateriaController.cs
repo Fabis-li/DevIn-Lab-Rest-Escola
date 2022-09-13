@@ -30,7 +30,7 @@ namespace Escola.Api.Controllers
         )
         {
             _materiaServico.Excluir(materiaId);
-            return Ok();
+            return NoContent();
         }
 
         [HttpPut("{materiaId}")]
